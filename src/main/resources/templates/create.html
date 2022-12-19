@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv=”Content-Type” content=”text/html; charset=UTF-8″ />
+        <title>Bolsa de Madrid</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+            integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <script type="text/javascript">
+            function myFunction() {
+            var x = $( "#mySelect option:selected" ).text();
+            var price = x.split(" ")[x.split(" ").length-1];
+            document.getElementById("demo").innerHTML = price;
+            var minimo = document.getElementById("min");
+            minimo.setAttribute("max", price);
+            var maximo = document.getElementById("max");
+            maximo.setAttribute("min", price);
+            }
+            function validar() {
+                if(document.getElementById("mySelect").value == 'select'){
+                    return false;
+                }
+                return true;
+            }
+        </script>
+        
+    </head>
+    <body>
+        <h1 align="center">Nueva consulta</h1>
+        <div class="card-body bg-info">
+        <form class="form-horizontal" action="#" th:action="@{/create-data}" th:object="${addForm}" method="get" onSubmit="return validar()">
+            <div class="form-group col-md-4 mx-auto">
+                <label class="badge badge-pill badge-warning" style="font-size: 1em; width: 10rem;" for="empresa">Empresa</label>
+                <select id="mySelect" onchange="myFunction()" th:field="*{name}" required="required" class="custom-select form-control">
+                    <option th:value="select" th:text="select" th:selected="true"/>
+                    <option th:each="beanWebScraping : ${listWebScraping}" th:value="${beanWebScraping.name}"
+                        th:text="${beanWebScraping.name + ' ' + beanWebScraping.price}" />
+                </select>
+            </div>
+            <div class="form-group col-md-4 mx-auto">
+                <label for="price" class="badge badge-pill badge-warning" style="font-size: 1em; width: 10rem;" hidden>price</label>
+                <input type="hidden" id="demo" for="price" class="form-control" style="font-size: 1em; width: 10rem; resize: none;"></input>
+            </div>
+            <div class="form-group col-md-4 mx-auto">
+                <label for="email" class="badge badge-pill badge-warning" style="font-size: 1em; width: 10rem;">Email</label>   
+                <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="email" required/>
+            </div>
+            <div class="form-group col-md-4 mx-auto">
+                <label for="min" class="badge badge-pill badge-warning" style="font-size: 1em; width: 10rem;">Precio Mínimo</label>
+                <input type="number" th:field="*{min}" class="form-control" id="min" placeholder="min" step="any" max="1000000000" required/>
+            </div>
+            <div class="form-group col-md-4 mx-auto">
+                <label for="max" class="badge badge-pill badge-warning" style="font-size: 1em; width: 10rem;">Precio Máximo</label>
+                <input type="number" th:field="*{max}" class="form-control" id="max" placeholder="max" step="any" min="0"required/>
+            </div>
+            <div class="row text-center">
+                <div class="col-sm-12 mt-5">
+                    <a href="/index" class="btn btn-dark btn-lg">Volver </a>
+                    <input type="submit" class="btn btn-danger btn-lg" value="Guardar"/>
+                </div>
+            </div>
+        </form>
+    </div>
+            <script type="text/javascript">
+                document.querySelectorAll("mySelect option").forEach(opt => {
+                    if (opt.value == "select") {
+                    opt.disabled = true;
+                    }
+                });
+            </script>
+            
+    </body>
+</html>
